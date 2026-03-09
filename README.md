@@ -1,103 +1,118 @@
-Generador de Imágenes de Productos desde Excel
+# 🎨 Generador de Imágenes de Productos desde Excel
 
-Este proyecto genera imágenes de productos automáticamente usando datos de un archivo Excel .
+Este proyecto genera imágenes de productos automáticamente usando datos de un archivo Excel. Ideal para catálogos, comercio electrónico o presentaciones visuales.
 
-El guión:
+## 📋 Descripción
 
-Lee productos desde PRODUCTOS.xlsx
+El script lee productos desde `PRODUCTOS.xlsx`, busca las imágenes correspondientes, e inserta el ID, título y producto en una plantilla gráfica. Las imágenes finales se guardan en la carpeta `imgFinal/`.
 
-Busca la imagen del producto
+## ✨ Características
 
-Inserta ID, título y producto en una plantilla
+- 🔄 **Generación automática** de imágenes desde Excel
+- 📏 **Ajuste automático** del tamaño del producto
+- 🖼️ **Eliminación automática** de fondo blanco
+- 📝 **Título dinámico** que se adapta al espacio disponible
+- 🆔 **Caja con ID** del producto
+- 🎨 **Soporte para plantilla gráfica** personalizada
+- 📦 **Procesamiento en lote** de múltiples productos
 
-Genera imágenes finales listas para catálogo o comercio electrónico
+## 📁 Estructura del Proyecto
 
-Las imágenes se guardan en:
+```
+project/
+│
+├── img/
+│   ├── plantilla.png    # Plantilla base para las imágenes
+│   └── default.jpg      # Imagen por defecto si no se encuentra
+│
+├── font/
+│   └── SANSSERIFCOLLECTION.TTF  # Fuente utilizada
+│
+├── imgFinal/            # Carpeta de salida para imágenes generadas
+│
+├── PRODUCTOS.xlsx       # Archivo Excel con datos de productos
+├── index.js             # Script principal
+├── package.json         # Dependencias del proyecto
+└── README.md            # Este archivo
+```
 
-imgFinal/
-Características
+## 🛠️ Requisitos
 
-Generación automática de imágenes desde Excel
+- **Node.js** 18 o superior
+- **npm** (viene incluido con Node.js)
 
-Ajuste automático del tamaño del producto.
+### Verificar Instalación
 
-Eliminación automática de fondo blanco.
+```bash
+node -v
+npm -v
+```
 
-Título dinámico que se adapta al espacio.
+## 🚀 Instalación
 
-Caja con ID del producto
+1. Clona o copia los archivos del proyecto.
+2. Instala las dependencias:
 
-Soporte para plantilla gráfica personalizada
+```bash
+npm install
+```
 
-Procesamiento en lote de múltiples productos
+Las dependencias principales son:
+- `xlsx`: Para leer archivos Excel
+- `canvas`: Para generar y manipular imágenes
 
-Estructura del proyecto
-project/ 
-│ 
-├── img/ 
-│ ├── plantilla.png 
-│ └── default.jpg 
-│ 
-├── font/ 
-│ └── SANSSERIFCOLLECTION.TTF 
-│ 
-├── imgFinal/ 
-│ 
-├── PRODUCTOS.xlsx 
-├── script.js 
-└── README.md
-Requisitos
+## 📊 Formato del Excel
 
-Necesitas tener instalado:
+El archivo `PRODUCTOS.xlsx` debe contener dos hojas:
 
-Node.js 18+
+### Hoja Principal (datos principales)
+| ID    | TÍTULO                  |
+|-------|-------------------------|
+| 34879 | 100 HYDRO WHEY 2 LIBRAS |
+| 97083 | 15cm 5m Cinta Impermeable Chova |
+| 73281 | 2 METROS ROLLO VINIL   |
 
-npm
+### Hoja "PRODUCTOS" (imágenes)
+| ID    | TÍTULO                  | ... | IMAGENES (Columna U) |
+|-------|-------------------------|-----|----------------------|
+| 34879 | 100 HYDRO WHEY 2 LIBRAS | ... | https://ejemplo.com/img1.jpg,https://ejemplo.com/img2.jpg |
+| 97083 | 15cm 5m Cinta Impermeable Chova | ... | https://ejemplo.com/img3.jpg |
 
-Verificar instalación:
+**Nota:** El script toma automáticamente la primera imagen de la lista separada por comas en la columna U.
 
-nodo -v npm -v 
- 
-Instalación
+## ▶️ Uso
 
-Clonar el proyecto o copiar los archivos y ejecutar:
+Ejecuta el generador con:
 
-npm install xlsx canvas
-Formato de Excel
+```bash
+node index.js
+```
 
-El archivo PRODUCTOS.xlsx debe contener:
+### Salida Esperada
 
-Hoja principal
-ID	TÍTULO
-34879	100 HYDRO WHEY 2 LIBRAS
-34880	PROTEÍNA DE SUERO 5 LB
-HojaPRODUCTOS
-ID	TÍTULO	IMAGEN1	IMAGEN2	IMAGEN3
-34879	100 HYDRO WHEY 2 LIBRAS	https://...jpg
-	https://...jpg
-	https://...jpg
-
-El script tomará automáticamente la primera imagen disponible .
-
-Ejecutar el generador
-node script.js
-
-Salida esperada en consola:
-
-Procesando 50 productos... 
-Generando imagen para ID: 34879 - 100 HYDRO WHEY 2 LIBRAS 
-Generando imagen para ID: 34880 - PROTEINA WHEY 5 LB 
+```
+Procesando 3 productos...
+Generando imagen para ID: 34879 - 100 HYDRO WHEY 2 LIBRAS
+Generando imagen para ID: 97083 - 15cm 5m Cinta Impermeable Chova
+Generando imagen para ID: 73281 - 2 METROS ROLLO VINIL
 ¡Todas las imágenes generadas exitosamente!
+```
 
-Las imágenes se guardarán en:
+Las imágenes se guardarán en `imgFinal/` con nombres como `34879.png`.
 
-imgFinal/
+## 📝 Notas
 
-Ejemplo:
+- Asegúrate de que `PRODUCTOS.xlsx` esté en la raíz del proyecto.
+- La plantilla `img/plantilla.png` debe tener el diseño base deseado.
+- Si una imagen no se encuentra, se usa `img/default.jpg`.
 
-imgFinal/ 
-34879.png 
-34880.png
+## 🤝 Contribución
+
+¡Las contribuciones son bienvenidas! Abre un issue o envía un pull request.
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.
 Cómo funciona
 
 El flujo del script es:
