@@ -25,7 +25,7 @@ async function generarImagen(link, id, titulo) {
   const ctx = canvas.getContext('2d');
 
   const maxWidth = 565;
-  const maxHeight = 900;
+  const maxHeight = 565;
 
   let width = producto.width;
   let height = producto.height;
@@ -86,19 +86,22 @@ async function generarImagen(link, id, titulo) {
 
   const whiteBoxY = 270;
   const whiteBoxWidth = 570;
-  drawRoundedRect(ctx, boxX, whiteBoxY, whiteBoxWidth, 200, 18);
 
+  ctx.font = 'bold 50px sans-serif';
+
+  const textHeight = calculateTextHeight(ctx, titulo, whiteBoxWidth, 50);
+  const whiteBoxHeight = textHeight; // padding
+  drawRoundedRect(ctx, boxX, whiteBoxY, whiteBoxWidth, whiteBoxHeight, 18);
+  
   ctx.fillStyle = "white";
   ctx.fill();
-
-  ctx.strokeStyle = "#ddd";
+  ctx.fillStyle = "black";
+  
+  ctx.strokeStyle = "#141313";
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  ctx.font = 'bold 50px sans-serif';
-  ctx.fillStyle = '#111';
-
-  ctx.shadowColor = "rgba(0,0,0,0.25)";
+  ctx.shadowColor = "rgba(233, 0, 0, 0.25)";
   ctx.shadowBlur = 4;
   ctx.shadowOffsetY = 2;
 
@@ -108,7 +111,7 @@ async function generarImagen(link, id, titulo) {
     paddingX,   // X
     310,  // Y
     whiteBoxWidth+20,  // ancho máximo
-    70    // altura entre líneas
+    50    // altura entre líneas
   );
 
   ctx.shadowColor = "transparent";
@@ -119,8 +122,29 @@ async function generarImagen(link, id, titulo) {
 
 
 // =========================
-// TEXTO CON ANCHO LIMITADO
+// CALCULAR ALTURA DEL TEXTO
 // =========================
+
+function calculateTextHeight(ctx, text, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let lines = 1;
+
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const metrics = ctx.measureText(testLine);
+    const testWidth = metrics.width;
+
+    if (testWidth > maxWidth && n > 0) {
+      lines++;
+      line = words[n] + ' ';
+    } else {
+      line = testLine;
+    }
+  }
+
+  return lines * lineHeight;
+}
 
 function drawTextBox(ctx, text, x, y, maxWidth, lineHeight) {
 
@@ -205,13 +229,9 @@ function removeWhiteBackground(ctx, width, height) {
 function encontrarImagen(titulo, productosDatos) {
   // productosDatos is array of arrays, [0] is headers
   const dataRows = productosDatos.slice(1);
-  const matchingRows = dataRows.filter(row => row[2] === titulo); // column C is index 2
-  if (matchingRows.length === 0) return null;
-  const imagenesStr = matchingRows[0][20]; // column U is index 20
-  if (!imagenesStr) return null;
-  const commaIndex = imagenesStr.indexOf(',');
-  if (commaIndex === -1) return imagenesStr;
-  return imagenesStr.substring(0, commaIndex);
+  const matchingRows = dataRows.filter(row => row[1] === titulo);
+  const link = matchingRows[0][2].split(',')[0]; // column C is index 2
+  return link.trim();
 }
 
 async function procesarExcel() {
